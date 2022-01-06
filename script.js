@@ -1,19 +1,64 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/draggabilly/3.0.0/draggabilly.pkgd.min.js" integrity="sha512-hbEWVzVt2yK7kQmJ1NZirxxO0NPtE4W09fT4f9Emem/n0rMPFHlLbuLcUcLNrtUGWGoQ8qGvKDVJnRRuCzjeZA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-</script>
 
-let plant1 = dragElement(document.getElementById("plant1"));
-let plant2 = dragElement(document.getElementById("plant2"));
-let plant3 = dragElement(document.getElementById("plant3"));
-let plant4 = dragElement(document.getElementById("plant4"));
-let plant5 = dragElement(document.getElementById("plant5"));
-let plant6 = dragElement(document.getElementById("plant6"));
-let plant7 = dragElement(document.getElementById("plant7"));
-let plant8 = dragElement(document.getElementById("plant8"));
-let plant9 = dragElement(document.getElementById("plant9"));
-let plant10 = dragElement(document.getElementById("plant10"));
-let plant11 = dragElement(document.getElementById("plant11"));
-let plant12 = dragElement(document.getElementById("plant12"));
-let plant13 = dragElement(document.getElementById("plant13"));
-let plant14 = dragElement(document.getElementById("plant14"));
-let draggie = new Draggabilly(plant1);
 
+dragElement(document.getElementById('plant1'));
+dragElement(document.getElementById('plant2'));
+dragElement(document.getElementById('plant3'));
+dragElement(document.getElementById('plant4'));
+dragElement(document.getElementById('plant5'));
+dragElement(document.getElementById('plant6'));
+dragElement(document.getElementById('plant7'));
+dragElement(document.getElementById('plant8'));
+dragElement(document.getElementById('plant9'));
+dragElement(document.getElementById('plant10'));
+dragElement(document.getElementById('plant11'));
+dragElement(document.getElementById('plant12'));
+dragElement(document.getElementById('plant13'));
+dragElement(document.getElementById('plant14'));
+
+/*"A closure is the combination of a function bundled together (enclosed) 
+with references to its surrounding state (the lexical environment). 
+In other words, a closure gives you access to an outer function’s scope 
+from an inner function." Create a closure so that you can track the dragged element*/
+
+function dragElement(terrariumElement) {
+	//set 4 positions for positioning on the screen
+	let pos1 = 0,
+		pos2 = 0,
+		pos3 = 0,
+		pos4 = 0;
+	terrariumElement.onpointerdown = pointerDrag;
+
+	function pointerDrag(e) {
+		e.preventDefault();
+		console.log(e);
+		// get the initial mouse cursor position for pos3 and pos4
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		// when the mouse moves, start the drag
+		document.onpointermove = elementDrag;
+		// when the mouse is lifted, stop the drag
+		document.onpointerup = stopElementDrag;
+	}
+
+	function elementDrag(e) {
+		// calculate the new cursor position
+		// pos1 = where the Xmouse WAS - where it IS
+		pos1 = pos3 - e.clientX;
+		// pos2 = where the Ymouse WAS - where it IS
+		pos2 = pos4 - e.clientY;
+		//reset pos3 to current location of Xmouse
+		pos3 = e.clientX;
+		//reset pos4 to current location of Ymouse
+		pos4 = e.clientY;
+		console.log(pos1, pos2, pos3, pos4);
+		// set the element's new position:
+		terrariumElement.style.top = terrariumElement.offsetTop - pos2 + 'px';
+		terrariumElement.style.left = terrariumElement.offsetLeft - pos1 + 'px';
+	}
+
+	function stopElementDrag() {
+		// stop calculating when mouse is released
+		document.onpointerup = null;
+		document.onpointermove = null;
+	}
+}
